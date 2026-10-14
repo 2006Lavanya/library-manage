@@ -1,0 +1,233 @@
+docker build -t todoapp .
+
+docker images(check)
+
+
+docker run -d -p 8082:80 --name todoapp-container   todoapp
+
+docker ps
+
+Port see
+
+docker hub report create NXT
+
+docker login
+
+docker tag todoapp:latest jayasanthiya22/topoapp:latest
+
+
+docker images
+
+docker push js22/todoapp:lastest
+
+docker stop todoapp-container 
+
+
+docker rm todoapp-container 
+
+docker rmi todoapp:latest
+
+docker rmi js22/todoapp:latest
+
+docker images 
+
+docker pull js22/todoapp:latest
+
+docker run -d -p 8082:80 -- name todoapp-container js22/todoapp:latest
+
+docker ps
+
+## Docker Practical — Full Command List
+
+First, VS Code terminal open panni project folder-kulla po:
+
+```
+cd C:\Users\dheiv\OneDrive\Desktop\devopPractice\student-app
+```
+
+### 1. Docker installed-ah check pannu
+
+```
+docker --version
+docker info
+```
+
+### 2. Docker image build pannu
+
+Project root-la `Dockerfile` and `.dockerignore` already create pannirukkanum.
+
+```
+docker build -t student-app .
+```
+
+### 3. Image create aachanu check pannu
+
+```
+docker images
+```
+
+### 4. Container run pannu
+
+```
+docker run -d -p 8081:80 --name student-container student-app
+```
+
+### 5. Container running-ah check pannu
+
+```
+docker ps
+```
+
+All containers status paaka:
+
+```
+docker ps -a
+```
+
+### 6. Browser-la application open pannu
+
+[http://localhost:8081 — Student Registration App](http://localhost:8081)
+
+### 7. Container logs paaka
+
+```
+docker logs student-container
+```
+
+Live logs paaka:
+
+```
+docker logs -f student-container
+```
+
+### 8. Container stop / start pannu
+
+```
+docker stop student-container
+docker start student-container
+```
+
+### 9. Container remove pannu
+
+First stop panni, apram remove pannu.
+
+```
+docker stop student-container
+docker rm student-container
+```
+
+### 10. Docker image remove pannu
+
+```
+docker rmi student-app
+```
+
+### 11. GitHub-la Dockerfile upload panna
+
+```
+git add .
+git commit -m "Add Docker configuration"
+git push
+
+
+## Exam-ku important commands
+
+| Command                                                         | Use                               |
+| --------------------------------------------------------------- | --------------------------------- |
+| `docker build -t student-app .`                                 | Image build pannum                |
+| `docker images`                                                 | Images list kaattum               |
+| `docker run -d -p 8081:80 --name student-container student-app` | Container create panni run pannum |
+| `docker ps`                                                     | Running containers kaattum        |
+| `docker ps -a`                                                  | All containers kaattum            |
+| `docker logs student-container`                                 | Container logs kaattum            |
+| `docker stop student-container`                                 | Container stop pannum             |
+| `docker start student-container`                                | Container restart pannum          |
+| `docker rm student-container`                                   | Container remove pannum           |
+| `docker rmi student-app`                                        | Image remove pannum               
+
+
+Dockerfile
+
+FROM node:22-alpine AS build
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+
+COPY --from=build /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+
+.dockerignore
+
+node_modules
+dist
+.git
+
+simple react application
+
+import { useState } from "react";
+
+function App() {
+  const [name, setName] = useState("");
+  const [items, setItems] = useState([]);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    if (name.trim() === "") {
+      alert("Please enter a name");
+      return;
+    }
+
+    setItems([...items, name]);
+    setName("");
+  }
+
+  function handleDelete(index) {
+    setItems(items.filter((_, i) => i !== index));
+  }
+
+  return (
+    <div style={{ padding: "30px", fontFamily: "Arial" }}>
+      <h1>Student Management</h1>
+
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Enter student name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+
+        <button type="submit">Add</button>
+      </form>
+
+      <h2>Student List</h2>
+
+      {items.length === 0 ? (
+        <p>No records found</p>
+      ) : (
+        <ul>
+          {items.map((item, index) => (
+            <li key={index}>
+              {item}{" "}
+              <button onClick={() => handleDelete(index)}>
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+export default App;
